@@ -61,10 +61,8 @@ public class CharStream {
   
   private void convertInputToCharStream() {
     
-    //clear output collection
+    //reset
     output.clear();
-    
-    //reset position
     position = 0;
     
     int inputLength = input.length();

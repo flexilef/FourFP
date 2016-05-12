@@ -27,15 +27,16 @@ public class CharStreamTest extends UnitTest {
     checkGetNext_ReturnFirstChar("1bc", '1', "getNext() : first character : numeral");
     checkGetNext_ReturnFirstChar("a", 'a', "getNext() : first character : single char");
     
-    checkHasNext_ReturnsBoolean("abc", true, "hasNext() : boolean : regular");
-    checkHasNext_ReturnsBoolean(" ", true, "hasNext() : boolean : empty char");
-    checkHasNext_ReturnsBoolean("a", true, "hasNext() : boolean : single char");
-    checkHasNext_ReturnsBoolean("", false, "hasNext() : boolean : empty input");
+    checkHasNext_ReturnBoolean("abc", true, "hasNext() : boolean : regular");
+    checkHasNext_ReturnBoolean(" ", true, "hasNext() : boolean : empty char");
+    checkHasNext_ReturnBoolean("a", true, "hasNext() : boolean : single char");
+    checkHasNext_ReturnBoolean("", false, "hasNext() : boolean : empty input");
 
     //checkGetNext_ReturnFirstChar("", ' ', "getNext() : first character : empty input"); should throw an exception and it does
 
-    System.out.println("Total tests run: "+ getTotalTestsRun());
-    System.out.println("Total tests failed: "+ getTotalTestsFailed());
+    System.out.println("CharStreamTest tests run: "+ getTotalTestsRun());
+    System.out.println("CharStreamTest tests failed: "+ getTotalTestsFailed());
+    System.out.println("---------------------------------------------------");
   }
   
   private void checkGetNext_ReturnFirstChar(String input, char expectedOutput, String error) {
@@ -53,16 +54,14 @@ public class CharStreamTest extends UnitTest {
     }
   }
   
-  private void checkHasNext_ReturnsBoolean(String input, boolean expectedOutput, String error) {
+  private void checkHasNext_ReturnBoolean(String input, boolean expectedOutput, String error) {
     
     totalTestsRun++;
     
     testObject.setInput(input);
-   
     boolean actualOutput = testObject.hasNext();
     
     if(actualOutput != expectedOutput) {
-      
       totalTestsFailed++;
       System.out.println("Failed: " + error);
       System.out.println("  Input - '" + input + "' : Expected - '" + expectedOutput + "' : Actual - '" + actualOutput + "'");

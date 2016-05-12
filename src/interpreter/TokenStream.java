@@ -7,6 +7,7 @@ package interpreter;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  *
@@ -14,23 +15,53 @@ import java.util.ArrayList;
  */
 public class TokenStream {
   
-  private List<Token> stream;
-  int position;
+  private List<Token> tokens;
+  private int position;
   
   TokenStream() {
-    stream = new ArrayList();
+    tokens = new ArrayList();
     position = 0;
   }
   
-  TokenStream(String input) {
+  TokenStream(List<Token> tokens) {
+    //create a copy
+    for(Iterator it = tokens.iterator(); it.hasNext();) {
+      this.tokens.add((Token) it.next());
+    }
     
+    position = 0;
   }
   
   public boolean hasNext() {
+    if(position < tokens.size()) {
+      return true;
+    }
+    
     return false;
   }
   
   public Token getNext() {
-    return null;
+    Token next = null;
+    
+    if(hasNext()) {
+      next = tokens.get(position);
+      position++;
+    }
+    else {
+      throw new EmptyTokenStreamRuntimeException("TokenStream went past last element in stream");
+    }
+    
+    return next;
+  }
+  
+  public void setTokens(List<Token> tokens) {
+    
+    //reset
+    this.tokens.clear();
+    position = 0;
+    
+    for(Iterator it = tokens.iterator(); it.hasNext();) {
+      this.tokens.add((Token) it.next());
+    }
   }
 }

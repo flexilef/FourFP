@@ -10,11 +10,15 @@ package interpreter;
  * @author Flex
  */
 public class InterpreterDemo {
-  
+
   public static void main(String[] args) {
-        
-    UnitTest test1 = new CharStreamTest();
-    
-    test1.runTests();
+
+    UnitTest tests[] = new UnitTest[2];
+    tests[0] = new CharStreamTest();
+    tests[1] = new TokenStreamTest();
+
+    for (UnitTest test : tests) {
+      test.runTests();
+    }
   }
 }

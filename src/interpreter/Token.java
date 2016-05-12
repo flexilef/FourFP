@@ -10,20 +10,36 @@ package interpreter;
  * @author Flex
  */
 public class Token {
-  
-  private String name;
+
+  private String type;
   private String value;
-  
-  Token(String name, String value) {
-    this.name = name;
+
+  Token(String type, String value) {
+    this.type = type;
     this.value = value;
   }
-  
+
   public String getType() {
-    return "";
+    return type;
   }
-  
+
   public String getValue() {
-    return "";
+    return value;
+  }
+
+  public boolean equals(Token rhs) {
+    if (rhs == null) {
+      return false;
+    }
+
+    final Token other = (Token) rhs;
+
+    if (!this.type.equals(other.getType())
+            && !this.value.equals(other.getValue()))
+    {
+      return false;
+    }
+    
+    return true;
   }
 }
