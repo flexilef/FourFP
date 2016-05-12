@@ -7,6 +7,7 @@ package interpreter;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  *
@@ -14,23 +15,61 @@ import java.util.ArrayList;
  */
 public class CharStream {
   
-  private List<Character> stream;
+  private String input;
+  private List<Character> output;
   private int position;
-  
+
   CharStream() {
-    stream = new ArrayList();
+    output = new ArrayList();
     position = 0;
   }
   
   CharStream(String input) {
+    this.input = input;
+    output = new ArrayList();
+    position = 0;
     
+    convertInputToCharStream();
   }
   
   public boolean hasNext() {
+    if(position < output.size()) {
+      return true;
+    }
+    
     return false;
   }
   
   public char getNext() {
-    return 'a';
+    char next = '\0';
+    
+    if(hasNext()) {
+      next = output.get(position);
+      position++;
+    }
+    else {
+      throw new EmptyCharStreamRuntimeException("CharStream went past last element in stream");
+    }
+    
+    return next;
+  }
+  
+  public void setInput(String input) {
+    this.input = input;
+    convertInputToCharStream();
+  }
+  
+  private void convertInputToCharStream() {
+    
+    //clear output collection
+    output.clear();
+    
+    //reset position
+    position = 0;
+    
+    int inputLength = input.length();
+    for(int i=0; i < inputLength; i++) {
+      output.add(input.charAt(i));
+    }
   }
 }

@@ -9,12 +9,13 @@ package interpreter;
  *
  * @author Flex
  */
-public class InterpreterDemo {
+class EmptyCharStreamRuntimeException extends RuntimeException {
+
+  public EmptyCharStreamRuntimeException() {
+    super();
+  }
   
-  public static void main(String[] args) {
-        
-    UnitTest test1 = new CharStreamTest();
-    
-    test1.runTests();
+  public EmptyCharStreamRuntimeException(String message) {
+    super(message);
   }
 }
