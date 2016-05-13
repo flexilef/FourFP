@@ -24,10 +24,10 @@ public class Parser {
     tokens.add(new Token("Identifier", "var"));
     tokens.add(new Token("Terminal", "="));
     //tokens.add(new Token("LiteralInteger", "5"));
-    //tokens.add(new Token("Identifier", "abc"));
-    tokens.add(new Token("LiteralInteger", "1"));
-    tokens.add(new Token("BinaryOperator", "+"));
-    tokens.add(new Token("LiteralInteger", "2"));
+    tokens.add(new Token("Identifier", "abc"));
+    //tokens.add(new Token("LiteralInteger", "1"));
+    //tokens.add(new Token("BinaryOperator", "+"));
+    //tokens.add(new Token("LiteralInteger", "2"));
     tokens.add(new Token("Terminal", ";"));
 
     tokenStream = new TokenStream(tokens);
@@ -51,129 +51,130 @@ public class Parser {
   }
 
   public boolean parseStatement() {
-    if (parseInitialization()) {
-      return true;
-    }
-    
-    if(parseAssignment()) {
+    if (!parseInitialization()) {
+      if (!parseAssignment()) {
+        return false;
+      }
       return true;
     }
 
-    return false;
+    return true;
   }
 
   public boolean parseInitialization() {
-    if (parseBasicType()) {
-      currentToken = tokenStream.getNext();
-    } else {
+    if (!parseBasicType()) {
       return false;
     }
-    if (parseAssignment()) {
 
-      return true;
+    currentToken = tokenStream.getNext();
+    if (!parseAssignment()) {
+      System.out.println("Error! parseInitialization: parseAssignment");
+      return false;
     }
 
-    return false;
+    return true;
   }
 
   public boolean parseAssignment() {
 
-    if (parseIdentifier()) {
-      currentToken = tokenStream.getNext();
-    } else {
+    /* First rule */
+    if (!parseIdentifier()) {
       return false;
     }
 
-    if (parseEqualSymbol()) {
-      currentToken = tokenStream.getNext();
-    } else {
+    currentToken = tokenStream.getNext();
+    if (!parseEqualSymbol()) {
+      System.out.println("Error! parseAssignment: parseEqualSymbol");
       return false;
     }
 
-    if (parseExpression() || parseLiteralInteger() || parseIdentifier()) {
-      currentToken = tokenStream.getNext();
-    } else {
+    currentToken = tokenStream.getNext();
+    if (!parseExpression()) {
+      if (!parseLiteralInteger()) {
+        if (!parseIdentifier()) {
+          return false;
+        }
+      }
+    }
+
+    currentToken = tokenStream.getNext();
+    if (!parseSemicolon()) {
+      System.out.println("Error! parseAssignment: parseSemicolon");
       return false;
     }
 
-    if (parseSemicolon()) {
-      return true;
-    }
-
-    return false;
+    return true;
   }
-  
+
   public boolean parseExpression() {
-    if(parseTerm()) {
-      currentToken = tokenStream.getNext();
+
+    if (!parseTerm()) {
+      return false;
     }
-    else {
+
+    currentToken = tokenStream.getNext();
+    if (!parsePlusSymbol()) {
+      //pushBack previous token
+      tokenStream.pushBack(1);
+      //set current token to the previous token
+      currentToken = tokenStream.getNext();
       return false;
     }
     
-    if(parsePlusSymbol()) {
-      currentToken = tokenStream.getNext();
-    }
-    else {
+    currentToken = tokenStream.getNext();
+    if (!parseExpression()) {
+      //pushback two tokens
+      //set currentToken to next token
       return false;
     }
-    
-    if(parseExpression()) {
-      return true;
-    }
-    
-    return false;
+
+    return true;
   }
-  
+
   public boolean parseTerm() {
-    if(parseFactor()) {
-      currentToken = tokenStream.getNext();
-    }
-    else {
+    
+    if (!parseFactor()) {
       return false;
     }
-    
-    if(parseMultiplySymbol()) {
-      currentToken = tokenStream.getNext();
-    }
-    else {
+
+    /*if (parseMultiplySymbol()) {
+    } else {
       return false;
     }
-    
-    if(parseTerm()) {
+
+    if (parseTerm()) {
       return true;
-    }
-    
-    return false;
+    }*/
+
+    return true;
   }
-  
+
   public boolean parseFactor() {
-    //first rule
-    if(parseLiteralInteger()) {
-      return true;
-    }
     
+    if (!parseLiteralInteger()) {
+      return false;
+    }
+
     //second rule
     //if(parseIdentifier()) {
     //  return true;
     //}
-    
-    return false;
+    return true;
   }
-  
+
   public boolean parseMultiplySymbol() {
-    if(currentToken.getValue().equals("*")) {
+    if (currentToken.getValue().equals("*")) {
       return true;
     }
-    
+
     return false;
   }
-  
+
   public boolean parsePlusSymbol() {
-    if(currentToken.getValue().equals("+")) {
+    if (currentToken.getValue().equals("+")) {
       return true;
     }
-    
+
     return false;
   }
 

@@ -60,13 +60,24 @@ Initialization -> BasicType Assignment
               
 BasicType -> ‘int’
 
-Assignment ->  Identifer ‘ = ‘ (Expression | Identifier | LiteralInteger) ‘ ;’
+*Assignment ->  Identifier ‘ = ‘ (Expression | Identifier | LiteralInteger) ‘ ;’
+Assignment -> Identifier '=' Expression;
+Assignment -> Identifier '=' Identifier;
+Assignment -> Identifier '=' LiteralInteger;
 
-*Expression -> Expression ‘+’ Term | Expression ‘-’ Term | Term 
 
-*Term -> Term ‘*’ Factor | Term ‘/’ Factor | Factor
+*Expression -> Term ‘+’ Expression | Term ‘-’ Expression | Term 
+Expression -> Term '+' Expression
+Expression -> Term '-' Expression 
+Expression -> Term
+
+*Term -> Factor ‘*’ Term | Factor ‘/’ Term | Factor
+Term -> Factor '*' Term
+Term -> Factor '/' Term
+Term -> Factor
         
 Factor -> LiteralInteger | Identifier | ‘(‘ Expression ‘)’ | ‘-’ Factor
-              
+
+
 *note: this is left recursive, if we need to get rid of that this link provides the steps:
 http://web.cs.wpi.edu/~kal/PLT/PLT4.1.2.html
