@@ -24,7 +24,10 @@ public class Parser {
     tokens.add(new Token("Identifier", "var"));
     tokens.add(new Token("Terminal", "="));
     //tokens.add(new Token("LiteralInteger", "5"));
-    tokens.add(new Token("Identifier", "abc"));
+    //tokens.add(new Token("Identifier", "abc"));
+    tokens.add(new Token("LiteralInteger", "1"));
+    tokens.add(new Token("BinaryOperator", "+"));
+    tokens.add(new Token("LiteralInteger", "2"));
     tokens.add(new Token("Terminal", ";"));
 
     tokenStream = new TokenStream(tokens);
@@ -51,16 +54,23 @@ public class Parser {
     if (parseInitialization()) {
       return true;
     }
+    
+    if(parseAssignment()) {
+      return true;
+    }
 
     return false;
   }
 
   public boolean parseInitialization() {
     if (parseBasicType()) {
-      if (parseAssignment()) {
+      currentToken = tokenStream.getNext();
+    } else {
+      return false;
+    }
+    if (parseAssignment()) {
 
-        return true;
-      }
+      return true;
     }
 
     return false;
@@ -69,21 +79,123 @@ public class Parser {
   public boolean parseAssignment() {
 
     if (parseIdentifier()) {
-      if (parseEqualSign()) {
-        if (parseLiteralInteger() || parseIdentifier()) {
-          if (parseSemicolon()) {
-            return true;
-          }
-        }
-      }
+      currentToken = tokenStream.getNext();
+    } else {
+      return false;
+    }
+
+    if (parseEqualSymbol()) {
+      currentToken = tokenStream.getNext();
+    } else {
+      return false;
+    }
+
+    if (parseExpression() || parseLiteralInteger() || parseIdentifier()) {
+      currentToken = tokenStream.getNext();
+    } else {
+      return false;
+    }
+
+    if (parseSemicolon()) {
+      return true;
     }
 
     return false;
   }
   
-  public boolean parseEqualSign() {
-    if (currentToken.getValue().equals("=")) {
+  public boolean parseExpression() {
+    if(parseTerm()) {
       currentToken = tokenStream.getNext();
+    }
+    else {
+      return false;
+    }
+    
+    if(parsePlusSymbol()) {
+      currentToken = tokenStream.getNext();
+    }
+    else {
+      return false;
+    }
+    
+    if(parseExpression()) {
+      return true;
+    }
+    
+    return false;
+  }
+  
+  public boolean parseTerm() {
+    if(parseFactor()) {
+      currentToken = tokenStream.getNext();
+    }
+    else {
+      return false;
+    }
+    
+    if(parseMultiplySymbol()) {
+      currentToken = tokenStream.getNext();
+    }
+    else {
+      return false;
+    }
+    
+    if(parseTerm()) {
+      return true;
+    }
+    
+    return false;
+  }
+  
+  public boolean parseFactor() {
+    //first rule
+    if(parseLiteralInteger()) {
+      return true;
+    }
+    
+    //second rule
+    //if(parseIdentifier()) {
+    //  return true;
+    //}
+    
+    return false;
+  }
+  
+  public boolean parseMultiplySymbol() {
+    if(currentToken.getValue().equals("*")) {
+      return true;
+    }
+    
+    return false;
+  }
+  
+  public boolean parsePlusSymbol() {
+    if(currentToken.getValue().equals("+")) {
+      return true;
+    }
+    
+    return false;
+  }
+
+  public boolean parseEqualSymbol() {
+    if (currentToken.getValue().equals("=")) {
+      return true;
+    }
+
+    return false;
+  }
+
+  public boolean parseBasicType() {
+    if (currentToken.getType().equals("BasicType")) {
+      return true;
+    }
+
+    return false;
+  }
+
+  /* Terminal parsing functions */
+  public boolean parseSemicolon() {
+    if (currentToken.getValue().equals(";")) {
       return true;
     }
 
@@ -92,25 +204,6 @@ public class Parser {
 
   public boolean parseLiteralInteger() {
     if (currentToken.getType().equals("LiteralInteger")) {
-      currentToken = tokenStream.getNext();
-      return true;
-    }
-
-    return false;
-  }
-  
-  public boolean parseSemicolon() {
-    if(currentToken.getValue().equals(";")) {
-      //currentToken = tokenStream.getNext();
-      return true;
-    }
-    
-    return false;
-  }
-
-  public boolean parseBasicType() {
-    if (currentToken.getType().equals("BasicType")) {
-      currentToken = tokenStream.getNext();
       return true;
     }
 
@@ -119,7 +212,6 @@ public class Parser {
 
   public boolean parseIdentifier() {
     if (currentToken.getType().equals("Identifier")) {
-      currentToken = tokenStream.getNext();
       return true;
     }
 
