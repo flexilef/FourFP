@@ -1,0 +1,72 @@
+KEYWORDS/SYMBOLS
+======================================
+
+BASIC TYPE
+-------------------
+int
+
+INFIXOP
+-------------------
++ - * / ==
+
+ASSIGNMENT
+--------------------
+=
+
+COMMAND
+--------------------
+circle rect
+
+SYMBOL
+--------------------
+#
+
+SEPARATOR
+--------------------
+; ( )
+
+Grammar Rules
+======================
+
+GRAMMAR: notes
+1. ‘X’ means X is a non-terminal
+2. | means or
+3. (x|y) means x or y
+-----------------------------------------------------------------------------------
+
+Statement -> Command | Initialization | Assignment
+
+Command -> ShapeCommand ‘ ‘ CommandArgList ‘ ;‘
+
+ShapeCommand -> ‘circle’ | ‘rect’
+
+CommandArgList -> Argument | Argument ‘ ‘ CommandArgList
+
+Argument -> Identifier | LiteralInteger | Expression
+
+Identifer -> Letter | Letter Identifier 
+
+Letter -> ‘a’ | ‘b’ | ‘c’ | ‘d’ | ‘e’ | ‘f’ | ‘g’ | ‘h’ | ‘i’ | ‘j’ | ‘k’ | ‘l’ | ‘m’ | ‘n’ | ‘o’ | ‘p’ | ‘q’ | ‘r’ | ‘s’ | ‘t’ | ‘u’ | ‘v’ | ‘w’ | ‘x’ | ‘y’ | ‘z’
+          
+LiteralInteger -> Digit | NonZeroDigit Digits
+
+Digit -> ‘0’ | NonZeroDigit
+
+NonZeroDigit -> ‘1’ | ‘2’ | ‘3’ | ‘4’ | ‘5’ | ‘6’ | ‘7’ | ‘8’ | ‘9’
+
+Digits -> Digit | Digit Digits 
+
+Initialization -> BasicType Assignment
+              
+BasicType -> ‘int’
+
+Assignment ->  Identifer ‘ = ‘ (Expression | Identifier | LiteralInteger) ‘ ;’
+
+*Expression -> Expression ‘+’ Term | Expression ‘-’ Term | Term 
+
+*Term -> Term ‘*’ Factor | Term ‘/’ Factor | Factor
+        
+Factor -> LiteralInteger | Identifier | ‘(‘ Expression ‘)’ | ‘-’ Factor
+              
+*note: this is left recursive, if we need to get rid of that this link provides the steps:
+http://web.cs.wpi.edu/~kal/PLT/PLT4.1.2.html
