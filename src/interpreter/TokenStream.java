@@ -24,6 +24,9 @@ public class TokenStream {
   }
   
   TokenStream(List<Token> tokens) {
+    
+    this.tokens = new ArrayList();
+
     //create a copy
     for(Iterator it = tokens.iterator(); it.hasNext();) {
       this.tokens.add((Token) it.next());
@@ -33,7 +36,7 @@ public class TokenStream {
   }
   
   public boolean hasNext() {
-    if(position < tokens.size()) {
+    if(position < this.tokens.size()) {
       return true;
     }
     
@@ -44,7 +47,7 @@ public class TokenStream {
     Token next = null;
     
     if(hasNext()) {
-      next = tokens.get(position);
+      next = this.tokens.get(position);
       position++;
     }
     else {

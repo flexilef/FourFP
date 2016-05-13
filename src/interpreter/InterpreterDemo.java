@@ -20,5 +20,8 @@ public class InterpreterDemo {
     for (UnitTest test : tests) {
       test.runTests();
     }
+    
+    Parser parser = new Parser();
+    parser.parse();
   }
 }
