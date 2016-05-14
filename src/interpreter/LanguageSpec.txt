@@ -30,15 +30,20 @@ GRAMMAR: notes
 3. (x|y) means x or y
 -----------------------------------------------------------------------------------
 
-Statement -> Command | Initialization | Assignment
+Statement -> (Command | Initialization | Assignment) ' ;'
 
-Command -> ShapeCommand ‘ ‘ CommandArgList ‘ ;‘
+RectCommand -> 'rect' Expression Expression Expression Expression Expression ' ;'
 
-ShapeCommand -> ‘circle’ | ‘rect’
+CircleCommand -> 'circle' Expression Expression Expression Expression ' ;'
 
-CommandArgList -> Argument | Argument ‘ ‘ CommandArgList
+Command -> RectCommand ‘ ;‘ |
+           CircleCommand
 
-Argument -> Identifier | LiteralInteger | Expression
+//ShapeCommand -> ‘circle’ | ‘rect’
+
+//CommandArgList -> Expression | Expression ‘ ‘ CommandArgList
+
+//Argument -> Identifier | LiteralInteger | Expression
 
 Identifer -> Letter | Letter Identifier 
 
@@ -56,18 +61,19 @@ Initialization -> BasicType Assignment
               
 BasicType -> ‘int’
 
-*Assignment ->  Identifier ‘ = ‘ Expression ‘ ;’
+*Assignment ->  Identifier ‘ = ‘ Expression
 
 Expression -> Term ExpressionFactored
 ExpressionFactored -> ('+' | '-') Expression | epsilon
-//Symbols that can follow Expression: ; )
+//Symbols that can follow Expression: ; ) LiteralInteger Identifier (due to commands)
 
 
 Term -> Factor TermFactored
 TermFactored -> ('*' | '/') Term | epsilon
-//Symbols that can follow Term: + | - | ; | )
+//Symbols that can follow Term: + | - | ; | ) LiteralInteger Identifier (due to commands)
 
-Factor -> LiteralInteger | Identifier | ‘(‘ Expression ‘)’ | ‘-’ Factor
+Factor -> LiteralInteger | Identifier | ‘(‘ Expression ‘)’ 
+//not implemented... Factor -> ‘-’ Factor
 
 *note: this is left recursive, if we need to get rid of that this link provides the steps:
 http://web.cs.wpi.edu/~kal/PLT/PLT4.1.2.html

@@ -5,9 +5,6 @@
  */
 package interpreter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  *
  * @author Flex
@@ -40,21 +37,99 @@ public class Parser {
     }
 
     if (valid) {
-      //System.out.println("Legal Syntax");
       return true;
     }
 
-    //System.out.println("Illegal Syntax");
     return false;
-
   }
 
   public boolean parseStatement() {
     if (!parseInitialization()) {
       if (!parseAssignment()) {
-        return false;
+        if (!parseRectCommand()) {
+          if (!parseCircleCommand()) {
+            return false;
+          }
+          return true;
+        }
+        return true;
       }
       return true;
+    }
+
+    return true;
+  }
+
+  public boolean parseRectCommand() {
+
+    if (!parseRectSymbol()) {
+      return false;
+    }
+
+    int argumentCount = 5;
+    for (int i = 1; i <= argumentCount; i++) {
+
+      currentToken = tokenStream.getNext();
+      if (!parseExpression()) {
+
+        System.out.println("Error! parseRectCommand: parseExpression");
+
+        //pushBack previous token
+        tokenStream.pushBack(i);
+        //set current token to the previous token
+        currentToken = tokenStream.getNext();
+
+        return false;
+      }
+    }
+
+    currentToken = tokenStream.getNext();
+    if (!parseSemicolon()) {
+      System.out.println("Error! parseRectCommand: parseSemicolon");
+
+      //pushBack previous token
+      tokenStream.pushBack(1);
+      //set current token to the previous token
+      currentToken = tokenStream.getNext();
+
+      return false;
+    }
+
+    return true;
+  }
+
+  public boolean parseCircleCommand() {
+    if (!parseCircleSymbol()) {
+      return false;
+    }
+
+    int argumentCount = 4;
+    for (int i = 1; i <= argumentCount; i++) {
+
+      currentToken = tokenStream.getNext();
+      if (!parseExpression()) {
+
+        System.out.println("Error! parseCircleCommand: parseExpression");
+
+        //pushBack previous token
+        tokenStream.pushBack(i);
+        //set current token to the previous token
+        currentToken = tokenStream.getNext();
+
+        return false;
+      }
+    }
+
+    currentToken = tokenStream.getNext();
+    if (!parseSemicolon()) {
+      System.out.println("Error! parseCircleCommand: parseSemicolon");
+
+      //pushBack previous token
+      tokenStream.pushBack(1);
+      //set current token to the previous token
+      currentToken = tokenStream.getNext();
+
+      return false;
     }
 
     return true;
@@ -142,15 +217,19 @@ public class Parser {
       return false;
     }
 
-    //handle epsilon case where ; and ) can follow an expression
-    if (currentToken.getValue().equals(";")
-            || currentToken.getValue().equals(")")) {
+    //handle epsilon case where the following can follow an Expression
+    if (parseSemicolon()
+            || parseRightParenthesis()
+            || parseLeftParenthesis()
+            || parseLiteralInteger()
+            || parseIdentifier()) {
 
       //pushBack previous token
       tokenStream.pushBack(1);
       //set current token to the previous token
       currentToken = tokenStream.getNext();
 
+      //returning true means Expression -> Term is true
       return true;
     }
 
@@ -198,17 +277,21 @@ public class Parser {
       return false;
     }
 
-    //handle epsilon case where ; + - ) can follow a term
-    if (currentToken.getValue().equals(";")
-            || currentToken.getValue().equals("+")
-            || currentToken.getValue().equals("-")
-            || currentToken.getValue().equals(")")) {
+    //handle epsilon case where the following can follow Term
+    if (parseSemicolon()
+            || parsePlusSymbol()
+            || parseMinusSymbol()
+            || parseRightParenthesis()
+            || parseLeftParenthesis()
+            || parseLiteralInteger()
+            || parseIdentifier()) {
 
       //pushBack previous token
       tokenStream.pushBack(1);
       //set current token to the previous token
       currentToken = tokenStream.getNext();
 
+      //returning true means Term -> Factor
       return true;
     }
 
@@ -287,90 +370,56 @@ public class Parser {
 
   /* Terminal parsing functions */
   public boolean parseLeftParenthesis() {
-    if (currentToken.getValue().equals("(")) {
-      return true;
-    }
-
-    return false;
+    return currentToken.getValue().equals("(");
   }
 
   public boolean parseRightParenthesis() {
-    if (currentToken.getValue().equals(")")) {
-      return true;
-    }
-
-    return false;
+    return currentToken.getValue().equals(")");
   }
 
   public boolean parseDivideSymbol() {
-    if (currentToken.getValue().equals("/")) {
-      return true;
-    }
-
-    return false;
+    return currentToken.getValue().equals("/");
   }
 
   public boolean parseMultiplySymbol() {
-    if (currentToken.getValue().equals("*")) {
-      return true;
-    }
-
-    return false;
+    return currentToken.getValue().equals("*");
   }
 
   public boolean parsePlusSymbol() {
-    if (currentToken.getValue().equals("+")) {
-      return true;
-    }
-
-    return false;
+    return currentToken.getValue().equals("+");
   }
 
   public boolean parseMinusSymbol() {
-    if (currentToken.getValue().equals("-")) {
-      return true;
-    }
-
-    return false;
+    return currentToken.getValue().equals("-");
   }
 
   public boolean parseEqualSymbol() {
-    if (currentToken.getValue().equals("=")) {
-      return true;
-    }
-
-    return false;
+    return currentToken.getValue().equals("=");
   }
 
   public boolean parseBasicType() {
-    if (currentToken.getType().equals("BasicType")) {
-      return true;
-    }
-
-    return false;
+    return currentToken.getType().equals("BasicType");
   }
 
   public boolean parseSemicolon() {
-    if (currentToken.getValue().equals(";")) {
-      return true;
-    }
-
-    return false;
+    return currentToken.getValue().equals(";");
   }
 
   public boolean parseLiteralInteger() {
-    if (currentToken.getType().equals("LiteralInteger")) {
-      return true;
-    }
-
-    return false;
+    return currentToken.getType().equals("LiteralInteger");
   }
 
   public boolean parseIdentifier() {
-    if (currentToken.getType().equals("Identifier")) {
-      return true;
-    }
+    return currentToken.getType().equals("Identifier");
 
-    return false;
+  }
+
+  public boolean parseCircleSymbol() {
+    return currentToken.getValue().equals("circle");
+
+  }
+
+  public boolean parseRectSymbol() {
+    return currentToken.getValue().equals("rect");
   }
 }
