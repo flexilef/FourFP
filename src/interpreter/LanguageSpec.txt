@@ -5,13 +5,9 @@ BASIC TYPE
 -------------------
 int
 
-INFIXOP
+BINARYOPERATOR
 -------------------
-+ - * / ==
-
-ASSIGNMENT
---------------------
-=
++ - * / =
 
 COMMAND
 --------------------
@@ -60,13 +56,18 @@ Initialization -> BasicType Assignment
               
 BasicType -> ‘int’
 
-Assignment ->  Identifer ‘ = ‘ (Expression | Identifier | LiteralInteger) ‘ ;’
+*Assignment ->  Identifier ‘ = ‘ Expression ‘ ;’
 
-*Expression -> Expression ‘+’ Term | Expression ‘-’ Term | Term 
+Expression -> Term ExpressionFactored
+ExpressionFactored -> ('+' | '-') Expression | epsilon
+//Symbols that can follow Expression: ;
 
-*Term -> Term ‘*’ Factor | Term ‘/’ Factor | Factor
-        
+
+Term -> Factor TermFactored
+TermFactored -> ('*' | '/') Term | epsilon
+//Symbols that can follow Term: + | - | ; | )
+
 Factor -> LiteralInteger | Identifier | ‘(‘ Expression ‘)’ | ‘-’ Factor
-              
+
 *note: this is left recursive, if we need to get rid of that this link provides the steps:
 http://web.cs.wpi.edu/~kal/PLT/PLT4.1.2.html
