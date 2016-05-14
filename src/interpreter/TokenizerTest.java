@@ -39,7 +39,10 @@ public class TokenizerTest extends UnitTest {
             "tokenize(): TokenStream: multiple tokens");
     checkTokenize_ReturnTokenStream("  int  var = 5 ;  ", "{{BasicType:int}{Identifier:var}{BinaryOperator:=}{LiteralInteger:5}{Separator:;}}",
             "tokenize(): TokenStream: multiple whitespace");
-    
+    checkTokenize_ReturnTokenStream("int var = 5 ; int a = 6 ;", "{{BasicType:int}{Identifier:var}{BinaryOperator:=}{LiteralInteger:5}{Separator:;}"
+            + "{BasicType:int}{Identifier:a}{BinaryOperator:=}{LiteralInteger:6}{Separator:;}}",
+            "tokenize(): TokenStream: multiple statements");
+
     System.out.println("TokenizerTest tests run: " + getTotalTestsRun());
     System.out.println("TokenizerTest tests failed: " + getTotalTestsFailed());
     System.out.println("---------------------------------------------------");

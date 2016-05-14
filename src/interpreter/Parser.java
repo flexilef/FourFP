@@ -14,27 +14,22 @@ import java.util.List;
  */
 public class Parser {
 
-  private List<Token> tokens;
   private TokenStream tokenStream;
   private Token currentToken;
 
   Parser() {
-    tokens = new ArrayList();
-    tokens.add(new Token("BasicType", "int"));
-    tokens.add(new Token("Identifier", "var"));
-    tokens.add(new Token("Terminal", "="));
-    tokens.add(new Token("LiteralInteger", "5"));
-    //tokens.add(new Token("Identifier", "abc"));
-    //tokens.add(new Token("LiteralInteger", "1"));
-    tokens.add(new Token("BinaryOperator", "+"));
-    //tokens.add(new Token("LiteralInteger", "2"));
-    tokens.add(new Token("Identifier", "cde"));
-    tokens.add(new Token("Terminal", ";"));
 
-    tokenStream = new TokenStream(tokens);
   }
 
-  public void parse() {
+  public boolean parse(String input) {
+
+    Tokenizer tk = new Tokenizer(input);
+    tokenStream = tk.getTokenStream();
+
+    return parse();
+  }
+
+  private boolean parse() {
 
     boolean valid = false;
 
@@ -45,10 +40,13 @@ public class Parser {
     }
 
     if (valid) {
-      System.out.println("Legal Syntax");
-    } else {
-      System.out.println("Illegal Syntax");
+      //System.out.println("Legal Syntax");
+      return true;
     }
+
+    //System.out.println("Illegal Syntax");
+    return false;
+
   }
 
   public boolean parseStatement() {
@@ -93,6 +91,7 @@ public class Parser {
     } else {
       return false;
     }
+
     if (!parseEqualSymbol()) {
       System.out.println("Error! parseAssignment: parseEqualSymbol");
 
@@ -106,6 +105,8 @@ public class Parser {
 
     currentToken = tokenStream.getNext();
     if (!parseExpression()) {
+      System.out.println("Error! parseAssignment: parseExpression");
+
       //pushBack previous 2 tokens
       tokenStream.pushBack(2);
       //set current token to the previous token
@@ -113,21 +114,6 @@ public class Parser {
 
       return false;
     }
-    /*
-     currentToken = tokenStream.getNext();
-     if (!parseExpression()) {
-     if (!parseLiteralInteger()) {
-     if (!parseIdentifier()) {
-     //pushBack previous 2 tokens
-     tokenStream.pushBack(2);
-     //set current token to the previous token
-     currentToken = tokenStream.getNext();
-
-     return false;
-     }
-     }
-     }
-     */
 
     currentToken = tokenStream.getNext();
     if (!parseSemicolon()) {
@@ -149,7 +135,7 @@ public class Parser {
     if (!parseTerm()) {
       return false;
     }
-
+//here
     currentToken = tokenStream.getNext();
     if (!parseExpressionFactored()) {
       //pushback one tokens
@@ -158,6 +144,18 @@ public class Parser {
       currentToken = tokenStream.getNext();
       return false;
     }
+
+    /*
+    currentToken = tokenStream.getNext();
+
+    if (!currentToken.equals(";")
+            || !currentToken.equals(")")) {
+      tokenStream.pushBack(1);
+      //set currentToken to next token
+      currentToken = tokenStream.getNext();
+
+      return false;
+    }*/
 
     return true;
   }
@@ -207,6 +205,7 @@ public class Parser {
       return false;
     }
     if (!parseTermFactored()) {
+
       //pushBack previous token
       tokenStream.pushBack(1);
       //set current token to the previous token
@@ -224,9 +223,11 @@ public class Parser {
     //if term were replaced by factor (because of epsilon),
     //then the following symbols can follow term/factor:
     //; if Expression -> Term ;
-    //+ or - Term -> ExpressionFactored -> + | -
+    //+ | - if Term ExpressionFactored -> Term (+|-) Expression
+    //) if Factor -> ( Expression ) -> ( Term )
     if (currentToken.getValue().equals("+")
             || currentToken.getValue().equals("-")
+            //|| currentToken.getValue().equals(")")
             || currentToken.getValue().equals(";")) {
 
       //push back one token because we didn't consume it, we just peeked
@@ -259,12 +260,56 @@ public class Parser {
 
     if (!parseLiteralInteger()) {
       if (!parseIdentifier()) {
-        return false;
+        if (!parseLeftParenthesis()) {
+          return false;
+        }
+
+        currentToken = tokenStream.getNext();
+        if (!parseExpression()) {
+          //error()
+          System.out.println("Error! parseFactor: parseExpression");
+
+          //pushBack previous token
+          tokenStream.pushBack(1);
+          //set current token to the previous token
+          currentToken = tokenStream.getNext();
+
+          return false;
+        }
+
+        currentToken = tokenStream.getNext();
+        if (!parseRightParenthesis()) {
+          //error()
+          System.out.println("Error! parseFactor: parseRightParenthesis");
+
+          //pushBack previous 2 tokens
+          tokenStream.pushBack(2);
+          //set current token to the previous token
+          currentToken = tokenStream.getNext();
+          return false;
+        }
       }
       return true;
     }
 
     return true;
+  }
+
+  /* Terminal parsing functions */
+  public boolean parseLeftParenthesis() {
+    if (currentToken.getValue().equals("(")) {
+      return true;
+    }
+
+    return false;
+  }
+
+  public boolean parseRightParenthesis() {
+    if (currentToken.getValue().equals(")")) {
+      return true;
+    }
+
+    return false;
   }
 
   public boolean parseDivideSymbol() {
@@ -315,7 +360,6 @@ public class Parser {
     return false;
   }
 
-  /* Terminal parsing functions */
   public boolean parseSemicolon() {
     if (currentToken.getValue().equals(";")) {
       return true;
@@ -338,18 +382,5 @@ public class Parser {
     }
 
     return false;
-  }
-
-  private boolean same(Token symbol, Token next) {
-    boolean match = false;
-
-    if (symbol.equals(next)) {
-      currentToken = tokenStream.getNext();
-      match = true;
-    } else {
-      match = false;
-    }
-
-    return match;
   }
 }
