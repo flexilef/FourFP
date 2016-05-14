@@ -53,13 +53,16 @@ public class Tokenizer {
       if (nextChar != ' ') {
         sb.append(nextChar);
       } else {
-        tokenStr = sb.toString();
 
-        token = makeToken(tokenStr);
-        tokenList.add(token);
+        if (sb.length() > 0) {
+          tokenStr = sb.toString();
 
-        //clear sb
-        sb.setLength(0);
+          token = makeToken(tokenStr);
+          tokenList.add(token);
+
+          //clear sb
+          sb.setLength(0);
+        }
       }
     }
 
