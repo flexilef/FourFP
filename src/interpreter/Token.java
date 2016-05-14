@@ -42,4 +42,18 @@ public class Token {
     
     return true;
   }
+  
+  @Override
+  public String toString() {
+    
+    StringBuilder sb = new StringBuilder();
+    
+    sb.append("{");
+    sb.append(type);
+    sb.append(":");
+    sb.append(value);
+    sb.append("}");
+    
+    return sb.toString();
+  }
 }

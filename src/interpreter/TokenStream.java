@@ -70,16 +70,34 @@ public class TokenStream {
   //move position, n number of places back
   public void pushBack(int n) {
 
-    if(n < 0) {
+    if (n < 0) {
       throw new TokenStreamRuntimeException("pushBack(): Attempted to push back negative positions");
     }
-    
-    if (position-n-1 >= 0) {
+
+    if (position - n - 1 >= 0) {
       //n+1 so position subtracts an extra position. Thus when getNext() is called position points to the intended tokens
-      this.position -= n+1;
-    }
-    else {
+      this.position -= n + 1;
+    } else {
       throw new TokenStreamRuntimeException("pushBack(): position is negative");
     }
+  }
+
+  @Override
+  public String toString() {
+
+    StringBuilder sb = new StringBuilder();
+    Token token;
+
+    sb.append("{");
+
+    for (Iterator it = tokens.iterator(); it.hasNext();) {
+      token = (Token) it.next();
+
+      sb.append(token.toString());
+    }
+
+    sb.append("}");
+
+    return sb.toString();
   }
 }
