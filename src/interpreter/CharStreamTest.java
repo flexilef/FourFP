@@ -32,8 +32,6 @@ public class CharStreamTest extends UnitTest {
     checkHasNext_ReturnBoolean("a", true, "hasNext() : boolean : single char");
     checkHasNext_ReturnBoolean("", false, "hasNext() : boolean : empty input");
 
-    //checkGetNext_ReturnFirstChar("", ' ', "getNext() : first character : empty input"); should throw an exception and it does
-
     System.out.println("CharStreamTest tests run: "+ getTotalTestsRun());
     System.out.println("CharStreamTest tests failed: "+ getTotalTestsFailed());
     System.out.println("---------------------------------------------------");
