@@ -32,15 +32,12 @@ public class ParserTest extends UnitTest {
     checkParse_ReturnBoolean("int var = abc + 2 ;", true, "parse() : boolean : initialization with mixed identifiers/literals in expression");
     checkParse_ReturnBoolean("int var = 1 + 2 - 3 * 4 / 5 ;", true, "parse() : boolean : initialization with multiple expressions");
     checkParse_ReturnBoolean("int var = 1 + ( 2 * 3 ) ;", true, "parse() : boolean : initialization with parenthesized expressions");
-
     checkParse_ReturnBoolean("var = 5 ;", true, "parse() : boolean : assignment with literal integer");
     checkParse_ReturnBoolean("var = abc ;", true, "parse() : boolean : assignment with identifier");
     checkParse_ReturnBoolean("var = var ;", true, "parse() : boolean : assignment with self");
     checkParse_ReturnBoolean("var = 1 + 2 ;", true, "parse() : boolean : assignment with addition expression");
     checkParse_ReturnBoolean("var = abc + 2 ;", true, "parse() : boolean : assignment with mixed identifiers/literals in expression");
     checkParse_ReturnBoolean("var = abc + def ;", true, "parse() : boolean : assignment with mixed multiple identifiers in expression");
-
-    //checkParse_ReturnBoolean("int var = 1 + ( 2 * 3 ) ;", true, "parse() : boolean : initialization with parenthesized expressions");
 
     System.out.println("ParserTest tests run: " + getTotalTestsRun());
     System.out.println("ParserTest tests failed: " + getTotalTestsFailed());

@@ -135,8 +135,25 @@ public class Parser {
     if (!parseTerm()) {
       return false;
     }
-//here
-    currentToken = tokenStream.getNext();
+
+    if (tokenStream.hasNext()) {
+      currentToken = tokenStream.getNext();
+    } else {
+      return false;
+    }
+
+    //handle epsilon case where ; and ) can follow an expression
+    if (currentToken.getValue().equals(";")
+            || currentToken.getValue().equals(")")) {
+
+      //pushBack previous token
+      tokenStream.pushBack(1);
+      //set current token to the previous token
+      currentToken = tokenStream.getNext();
+
+      return true;
+    }
+
     if (!parseExpressionFactored()) {
       //pushback one tokens
       tokenStream.pushBack(1);
@@ -145,39 +162,15 @@ public class Parser {
       return false;
     }
 
-    /*
-    currentToken = tokenStream.getNext();
-
-    if (!currentToken.equals(";")
-            || !currentToken.equals(")")) {
-      tokenStream.pushBack(1);
-      //set currentToken to next token
-      currentToken = tokenStream.getNext();
-
-      return false;
-    }*/
-
     return true;
   }
 
   public boolean parseExpressionFactored() {
 
-    //epsilon
-    if (tokenStream.hasNext()) {
-      if (!parsePlusSymbol()) {
-        if (!parseMinusSymbol()) {
-          return false;
-        }
+    if (!parsePlusSymbol()) {
+      if (!parseMinusSymbol()) {
+        return false;
       }
-    } else {
-      //token push back last token because we are at the end
-      //pushback one token
-      tokenStream.pushBack(1);
-      //set currentToken to next token
-      currentToken = tokenStream.getNext();
-
-      //found epsilon
-      return true;
     }
 
     currentToken = tokenStream.getNext();
@@ -204,6 +197,21 @@ public class Parser {
     } else {
       return false;
     }
+
+    //handle epsilon case where ; + - ) can follow a term
+    if (currentToken.getValue().equals(";")
+            || currentToken.getValue().equals("+")
+            || currentToken.getValue().equals("-")
+            || currentToken.getValue().equals(")")) {
+
+      //pushBack previous token
+      tokenStream.pushBack(1);
+      //set current token to the previous token
+      currentToken = tokenStream.getNext();
+
+      return true;
+    }
+
     if (!parseTermFactored()) {
 
       //pushBack previous token
@@ -218,24 +226,6 @@ public class Parser {
   }
 
   public boolean parseTermFactored() {
-
-    //cheating: to apply the epsilon rule, we cheat knowing that 
-    //if term were replaced by factor (because of epsilon),
-    //then the following symbols can follow term/factor:
-    //; if Expression -> Term ;
-    //+ | - if Term ExpressionFactored -> Term (+|-) Expression
-    //) if Factor -> ( Expression ) -> ( Term )
-    if (currentToken.getValue().equals("+")
-            || currentToken.getValue().equals("-")
-            //|| currentToken.getValue().equals(")")
-            || currentToken.getValue().equals(";")) {
-
-      //push back one token because we didn't consume it, we just peeked
-      tokenStream.pushBack(1);
-      currentToken = tokenStream.getNext();
-
-      return true;
-    }
 
     if (!parseMultiplySymbol()) {
       if (!parseDivideSymbol()) {
