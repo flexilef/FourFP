@@ -60,7 +60,7 @@ BasicType -> ‘int’
 
 Expression -> Term ExpressionFactored
 ExpressionFactored -> ('+' | '-') Expression | epsilon
-//Symbols that can follow Expression: ;
+//Symbols that can follow Expression: ; )
 
 
 Term -> Factor TermFactored
