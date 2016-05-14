@@ -60,21 +60,16 @@ Initialization -> BasicType Assignment
               
 BasicType -> ‘int’
 
-*Assignment ->  Identifier ‘ = ‘ (Expression | Identifier | LiteralInteger) ‘ ;’
-Assignment -> Identifier '=' Expression;
-Assignment -> Identifier '=' Identifier;
-Assignment -> Identifier '=' LiteralInteger;
+*Assignment ->  Identifier ‘ = ‘ Expression ‘ ;’
 
+//*Expression -> Term (‘+’ | '-') Expression | Term 
+Expression -> Term ExpressionFactored
+ExpressionFactored -> ('+' | '-') Expression | epsilon
 
-*Expression -> Term ‘+’ Expression | Term ‘-’ Expression | Term 
-Expression -> Term '+' Expression
-Expression -> Term '-' Expression 
-Expression -> Term
+//*Term -> Factor ‘*’ Term | Factor ‘/’ Term | Factor
+Term -> Factor TermFactored
+TermFactored -> ('*' | '/') Term | epsilon
 
-*Term -> Factor ‘*’ Term | Factor ‘/’ Term | Factor
-Term -> Factor '*' Term
-Term -> Factor '/' Term
-Term -> Factor
         
 Factor -> LiteralInteger | Identifier | ‘(‘ Expression ‘)’ | ‘-’ Factor
 
