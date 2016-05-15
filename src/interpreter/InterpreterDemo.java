@@ -22,5 +22,31 @@ public class InterpreterDemo {
     for (UnitTest test : tests) {
       test.runTests();
     }
+
+    ASTreeNode litint = new LiteralIntegerNode(5);
+    ASTreeNode declint = new DeclarationIntegerNode("var");
+    ASTreeNode assnode = new AssignmentNode(declint, litint);
+
+    System.out.println(litint.toString());
+    System.out.println(declint.toString());
+    System.out.println(assnode.toString());
+
+    System.out.println(interpret(assnode));
+  }
+
+  public static int interpret(ASTreeNode root) {
+
+    if (root.nodeType.equals("Assignment")) {
+      int right = interpret(((AssignmentNode) root).right);
+      //set the symbol table with left.name and int type with right value
+      //          t->leftchild->symbtable_entry->value=right_value;
+      System.out.println("Initialized " + ((DeclarationIntegerNode) ((AssignmentNode) root).left).name + " to " + right);
+
+      return right;
+    } else if (root.nodeType.equals("LiteralInteger")) {
+      return ((LiteralIntegerNode) root).value;
+    }
+
+    return 0;
   }
 }
