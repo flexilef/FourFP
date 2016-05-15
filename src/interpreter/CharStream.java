@@ -19,12 +19,12 @@ public class CharStream {
   private List<Character> output;
   private int position;
 
-  CharStream() {
+  public CharStream() {
     output = new ArrayList();
     position = 0;
   }
   
-  CharStream(String input) {
+  public CharStream(String input) {
     this.input = input;
     output = new ArrayList();
     position = 0;

@@ -18,11 +18,11 @@ public class Tokenizer {
   private String input;
   private TokenStream output;
 
-  Tokenizer() {
+  public Tokenizer() {
     output = null;
   }
 
-  Tokenizer(String input) {
+  public Tokenizer(String input) {
 
     this.input = input;
     tokenize();

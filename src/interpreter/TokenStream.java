@@ -18,12 +18,12 @@ public class TokenStream {
   private List<Token> tokens;
   private int position;
 
-  TokenStream() {
+  public TokenStream() {
     tokens = new ArrayList();
     position = 0;
   }
 
-  TokenStream(List<Token> tokens) {
+  public TokenStream(List<Token> tokens) {
 
     this.tokens = new ArrayList();
 
