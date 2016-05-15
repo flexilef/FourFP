@@ -14,7 +14,7 @@ public class Parser {
   private TokenStream tokenStream;
   private Token currentToken;
 
-  Parser() {
+  public Parser() {
 
   }
 

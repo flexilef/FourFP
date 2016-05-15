@@ -5,6 +5,12 @@
  */
 package interpreter;
 
+import interpreter.Tests.ParserTest;
+import interpreter.Tests.TokenStreamTest;
+import interpreter.Tests.UnitTest;
+import interpreter.Tests.TokenizerTest;
+import interpreter.Tests.CharStreamTest;
+
 /**
  *
  * @author Flex
