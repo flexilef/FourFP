@@ -9,20 +9,17 @@ package interpreter;
  *
  * @author Flex
  */
-public class ASTreeNode {
-  
-  public String nodeType; 
-          
-  ASTreeNode() {
-    nodeType = "Empty";
+public class IdentifierNode extends ASTreeNode{
+
+  public String name;
+
+  IdentifierNode(String name) {
+    this.name = name;
+    nodeType = "Identifier";
   }
-  
-  public String getNodeType() {
-    return nodeType;
-  }
-  
-  @Override 
+
+  @Override
   public String toString() {
-    return "["+ nodeType +"]";
+    return "[" + nodeType + ":" + name + "]";
   }
 }
