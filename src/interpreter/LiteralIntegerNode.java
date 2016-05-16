@@ -20,6 +20,6 @@ public class LiteralIntegerNode extends ASTreeNode {
 
   @Override
   public String toString() {
-    return "{" + nodeType + ":" + value + "}";
+    return "[" + nodeType + ":" + value + "]";
   }
 }
