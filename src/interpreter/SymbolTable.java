@@ -13,3 +13,12 @@ public class SymbolTable {
         return symbol_table.get(key); 
     }
 }
+
+/* Example of SymbolTable being used
+
+SymbolTable symbol_table = new SymbolTable();
+symbol_table.put("a" , "100")
+
+// prints out 100
+System.out.println(symbol_table.get("a");
+*/
