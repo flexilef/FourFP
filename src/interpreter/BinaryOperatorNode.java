@@ -20,22 +20,6 @@ public class BinaryOperatorNode extends ASTreeNode {
     nodeType = "BinaryOp";
   }
 
-  public void setLeftNode(ASTreeNode node) {
-    left = node;
-  }
-
-  public ASTreeNode getLeftNode() {
-    return left;
-  }
-
-  public void setRightNode(ASTreeNode node) {
-    right = node;
-  }
-
-  public ASTreeNode getRightNode() {
-    return right;
-  }
-
   @Override
   public String toString() {
     return "{" + "["+nodeType+"]" + ":" + "LEFTNODE:" + left.toString() + "-RIGHTNODE:" + right.toString() + "}";

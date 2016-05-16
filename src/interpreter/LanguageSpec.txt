@@ -30,20 +30,11 @@ GRAMMAR: notes
 3. (x|y) means x or y
 -----------------------------------------------------------------------------------
 
-Statement -> (Command | Initialization | Assignment) ' ;'
+Statement -> (CircleCommand | RectCommand | Initialization | Assignment)
 
 RectCommand -> 'rect' Expression Expression Expression Expression Expression ' ;'
 
 CircleCommand -> 'circle' Expression Expression Expression Expression ' ;'
-
-Command -> RectCommand ‘ ;‘ |
-           CircleCommand
-
-//ShapeCommand -> ‘circle’ | ‘rect’
-
-//CommandArgList -> Expression | Expression ‘ ‘ CommandArgList
-
-//Argument -> Identifier | LiteralInteger | Expression
 
 Identifer -> Letter | Letter Identifier 
 
@@ -61,7 +52,7 @@ Initialization -> BasicType Assignment
               
 BasicType -> ‘int’
 
-*Assignment ->  Identifier ‘ = ‘ Expression
+Assignment ->  Identifier ‘ = ‘ Expression
 
 Expression -> Term ExpressionFactored
 ExpressionFactored -> ('+' | '-') Expression | epsilon

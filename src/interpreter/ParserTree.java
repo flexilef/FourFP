@@ -29,7 +29,7 @@ public class ParserTree {
   }
 
   public boolean testParse(String input) {
-    
+
     Tokenizer tk = new Tokenizer(input);
     tokenStream = tk.getTokenStream();
 
@@ -88,7 +88,7 @@ public class ParserTree {
     }
 
     int argumentCount = 4;
-    ASTreeNode circleNode = new CircleCommandNode(null);
+    CircleCommandNode circleNode = new CircleCommandNode(null);
     ASTreeNode expArgs[] = new ASTreeNode[argumentCount];
 
     for (int i = 1; i <= argumentCount; i++) {
@@ -108,7 +108,7 @@ public class ParserTree {
         return null;
       }
 
-      ((CircleCommandNode) circleNode).arguments = expArgs;
+      circleNode.arguments = expArgs;
     }
 
     currentToken = tokenStream.getNext();
@@ -133,7 +133,7 @@ public class ParserTree {
     }
 
     int argumentCount = 5;
-    ASTreeNode rectNode = new RectCommandNode(null);
+    RectCommandNode rectNode = new RectCommandNode(null);
     ASTreeNode expArgs[] = new ASTreeNode[argumentCount];
 
     for (int i = 1; i <= argumentCount; i++) {
@@ -153,7 +153,7 @@ public class ParserTree {
         return null;
       }
 
-      ((RectCommandNode) rectNode).arguments = expArgs;
+      rectNode.arguments = expArgs;
     }
 
     currentToken = tokenStream.getNext();
@@ -172,15 +172,19 @@ public class ParserTree {
   }
 
   public ASTreeNode parseInitialization() {
+
+    DeclarationNode declareIntNode = null;
+    BinaryOperatorNode equalNode = null;
+
     if (!parseBasicType()) {
       return null;
     }
 
-    ASTreeNode declareIntNode = new DeclarationNode(currentToken.getValue(), null);
+    declareIntNode = new DeclarationNode(currentToken.getValue(), null);
 
     currentToken = tokenStream.getNext();
 
-    ASTreeNode equalNode = parseAssignment();
+    equalNode = (BinaryOperatorNode) parseAssignment();
 
     if (equalNode == null) {
       System.out.println("Error! parseInitialization: parseAssignment");
@@ -193,21 +197,25 @@ public class ParserTree {
       return null;
     }
 
-    String identifierName = ((IdentifierNode) ((BinaryOperatorNode) equalNode).left).name;
-    ((DeclarationNode) declareIntNode).identifier = identifierName;
+    String identifierName = ((IdentifierNode) (equalNode.left)).name;
+    declareIntNode.identifier = identifierName;
 
-    ((BinaryOperatorNode) equalNode).setLeftNode(declareIntNode);
+    //((BinaryOperatorNode) equalNode).setLeftNode(declareIntNode);
+    equalNode.left = declareIntNode;
 
     return equalNode;
   }
 
   public ASTreeNode parseAssignment() {
 
+    ASTreeNode idNode = null;
+    BinaryOperatorNode equalNode = null;
+
     if (!parseIdentifier()) {
       return null;
     }
 
-    ASTreeNode idNode = new IdentifierNode(currentToken.getValue());
+    idNode = new IdentifierNode(currentToken.getValue());
 
     if (tokenStream.hasNext()) {
       currentToken = tokenStream.getNext();
@@ -226,7 +234,7 @@ public class ParserTree {
       return null;
     }
 
-    ASTreeNode equalNode = new EqualNode(idNode, null);
+    equalNode = new EqualNode(idNode, null);
 
     currentToken = tokenStream.getNext();
 
@@ -242,7 +250,7 @@ public class ParserTree {
       return null;
     }
 
-    ((BinaryOperatorNode) equalNode).setRightNode(expNode);
+    equalNode.right = expNode;
 
     currentToken = tokenStream.getNext();
     if (!parseSemicolon()) {
@@ -261,6 +269,7 @@ public class ParserTree {
 
   public ASTreeNode parseExpression() {
 
+    BinaryOperatorNode expFactoredNode = null;
     ASTreeNode termNode = parseTerm();
 
     if (termNode == null) {
@@ -291,7 +300,7 @@ public class ParserTree {
       return termNode;
     }
 
-    ASTreeNode expFactoredNode = parseExpressionFactored();
+    expFactoredNode = (BinaryOperatorNode) parseExpressionFactored();
     if (expFactoredNode == null) {
       //pushback one tokens
       tokenStream.pushBack(1);
@@ -301,14 +310,15 @@ public class ParserTree {
     }
 
     //create Expression -> Term ExpressionFactored
-    ((BinaryOperatorNode) expFactoredNode).setLeftNode(termNode);
+    //((BinaryOperatorNode) expFactoredNode).setLeftNode(termNode);
+    expFactoredNode.left = termNode;
 
     return expFactoredNode;
   }
 
   public ASTreeNode parseExpressionFactored() {
 
-    ASTreeNode binaryOpNode = null;
+    BinaryOperatorNode binaryOpNode = null;
     ASTreeNode expNode = null;
 
     if (!parsePlusSymbol()) {
@@ -334,7 +344,8 @@ public class ParserTree {
       return null;
     }
 
-    ((BinaryOperatorNode) binaryOpNode).setRightNode(expNode);
+    //((BinaryOperatorNode) binaryOpNode).setRightNode(expNode);
+    binaryOpNode.right = expNode;
 
     return binaryOpNode;
   }
@@ -342,7 +353,7 @@ public class ParserTree {
   public ASTreeNode parseTerm() {
 
     ASTreeNode factorNode = parseFactor();
-    ASTreeNode termFactoredNode = null;
+    BinaryOperatorNode termFactoredNode = null;
 
     if (factorNode == null) {
       System.out.println("Null factor node");
@@ -373,7 +384,7 @@ public class ParserTree {
       return factorNode;
     }
 
-    termFactoredNode = parseTermFactored();
+    termFactoredNode = (BinaryOperatorNode) parseTermFactored();
     if (termFactoredNode == null) {
 
       //pushBack previous token
@@ -385,7 +396,8 @@ public class ParserTree {
     }
 
     //create Term -> Factor  (*|/) Term
-    ((BinaryOperatorNode) termFactoredNode).setLeftNode(factorNode);
+    //((BinaryOperatorNode) termFactoredNode).setLeftNode(factorNode);
+    termFactoredNode.left = factorNode;
 
     return termFactoredNode;
   }
@@ -393,6 +405,7 @@ public class ParserTree {
   public ASTreeNode parseTermFactored() {
 
     BinaryOperatorNode binaryOpNode = null;
+    ASTreeNode termNode = null;
 
     if (!parseMultiplySymbol()) {
       if (!parseDivideSymbol()) {
@@ -407,7 +420,7 @@ public class ParserTree {
     }
 
     currentToken = tokenStream.getNext();
-    ASTreeNode termNode = parseTerm();
+    termNode = parseTerm();
     if (termNode == null) {
       //pushBack previous token
       tokenStream.pushBack(1);
@@ -417,12 +430,17 @@ public class ParserTree {
       return null;
     }
 
-    binaryOpNode.setRightNode(termNode);
+    //binaryOpNode.setRightNode(termNode);
+    binaryOpNode.right = termNode;
 
     return binaryOpNode;
   }
 
   public ASTreeNode parseFactor() {
+
+    ASTreeNode varNode = null;
+    ASTreeNode expNode = null;
+    ASTreeNode literalNode = null;
 
     if (!parseLiteralInteger()) {
       if (!parseIdentifier()) {
@@ -432,7 +450,7 @@ public class ParserTree {
 
         //get next token so we skip parenthesis, or else stackoverflow
         currentToken = tokenStream.getNext();
-        ASTreeNode expNode = parseExpression();
+        expNode = parseExpression();
 
         if (expNode == null) {
           //error()
@@ -462,13 +480,13 @@ public class ParserTree {
       }
 
       String varName = currentToken.getValue();
-      ASTreeNode varNode = new IdentifierNode(varName);
+      varNode = new IdentifierNode(varName);
 
       return varNode;
     }
 
     int value = Integer.parseInt(currentToken.getValue());
-    ASTreeNode literalNode = new LiteralIntegerNode(value);
+    literalNode = new LiteralIntegerNode(value);
 
     return literalNode;
   }

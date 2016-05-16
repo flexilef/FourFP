@@ -17,21 +17,4 @@ public class DivideNode extends BinaryOperatorNode {
 
     nodeType = "DivideNode";
   }
-
-  public void setLeftNode(ASTreeNode node) {
-    left = node;
-  }
-
-  public ASTreeNode getLeftNode() {
-    return left;
-  }
-
-  public void setRightNode(ASTreeNode node) {
-    right = node;
-  }
-
-  public ASTreeNode getRightNode() {
-    return right;
-  }
-
 }

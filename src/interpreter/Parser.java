@@ -409,9 +409,9 @@ public class Parser {
     return currentToken.getType().equals("LiteralInteger");
   }
 
-  public boolean parseIdentifier() {
+  
+public boolean parseIdentifier() {
     return currentToken.getType().equals("Identifier");
-
   }
 
   public boolean parseCircleSymbol() {
