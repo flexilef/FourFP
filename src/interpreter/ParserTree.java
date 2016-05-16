@@ -200,7 +200,6 @@ public class ParserTree {
     String identifierName = ((IdentifierNode) (equalNode.left)).name;
     declareIntNode.identifier = identifierName;
 
-    //((BinaryOperatorNode) equalNode).setLeftNode(declareIntNode);
     equalNode.left = declareIntNode;
 
     return equalNode;
@@ -310,7 +309,6 @@ public class ParserTree {
     }
 
     //create Expression -> Term ExpressionFactored
-    //((BinaryOperatorNode) expFactoredNode).setLeftNode(termNode);
     expFactoredNode.left = termNode;
 
     return expFactoredNode;
@@ -344,7 +342,6 @@ public class ParserTree {
       return null;
     }
 
-    //((BinaryOperatorNode) binaryOpNode).setRightNode(expNode);
     binaryOpNode.right = expNode;
 
     return binaryOpNode;
@@ -396,7 +393,6 @@ public class ParserTree {
     }
 
     //create Term -> Factor  (*|/) Term
-    //((BinaryOperatorNode) termFactoredNode).setLeftNode(factorNode);
     termFactoredNode.left = factorNode;
 
     return termFactoredNode;
