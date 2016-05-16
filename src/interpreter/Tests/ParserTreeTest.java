@@ -65,7 +65,7 @@ public class ParserTreeTest extends UnitTest {
     checkParse_ReturnBoolean("rect ( 1 ) ( ab ) ( ( 3 * c ) ) 4 5 ;", true, "parse() : boolean : rect command with parentheses");
 
     System.out.println("ParserTreeTest tests run: " + getTotalTestsRun());
-    System.out.println("ParserTreeTest tests failed: " + getTotalTestsFailed());
+    System.out.println("ParseParserTreeTestrTest tests failed: " + getTotalTestsFailed());
     System.out.println("---------------------------------------------------");
   }
 

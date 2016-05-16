@@ -30,6 +30,11 @@ public class InterpreterDemo {
     for (UnitTest test : tests) {
       test.runTests();
     }
+
+    String statement = "rect ( 1 ) ( 2 + 2 ) ( 3 - ( 3 * 2 ) ) ( 4 * 2 ) 2 ;";
+
+    Interpreter interpreter = new Interpreter();
+    interpreter.interpret(statement);
   }
 
   public static int interpret(ASTreeNode root) {
