@@ -18,8 +18,18 @@ public class ParserTree {
 
   }
 
-  public boolean parse(String input) {
+  public ASTreeNode parse(String input) {
 
+    Tokenizer tk = new Tokenizer(input);
+    tokenStream = tk.getTokenStream();
+
+    ASTreeNode root = parse();
+
+    return root;
+  }
+
+  public boolean testParse(String input) {
+    
     Tokenizer tk = new Tokenizer(input);
     tokenStream = tk.getTokenStream();
 
@@ -56,7 +66,109 @@ public class ParserTree {
       return initNode;
     }
 
+    ASTreeNode rectCommandNode = parseRectCommand();
+
+    if (rectCommandNode != null) {
+      return rectCommandNode;
+    }
+
+    ASTreeNode circleCommandNode = parseCircleCommand();
+
+    if (circleCommandNode != null) {
+      return circleCommandNode;
+    }
+
     return null;
+  }
+
+  public ASTreeNode parseCircleCommand() {
+
+    if (!parseCircleSymbol()) {
+      return null;
+    }
+
+    int argumentCount = 4;
+    ASTreeNode circleNode = new CircleCommandNode(null);
+    ASTreeNode expArgs[] = new ASTreeNode[argumentCount];
+
+    for (int i = 1; i <= argumentCount; i++) {
+
+      currentToken = tokenStream.getNext();
+
+      expArgs[i - 1] = parseExpression();
+      if (expArgs[i - 1] == null) {
+
+        System.out.println("Error! parseCircleCommand: parseExpression");
+
+        //pushBack previous token
+        tokenStream.pushBack(i);
+        //set current token to the previous token
+        currentToken = tokenStream.getNext();
+
+        return null;
+      }
+
+      ((CircleCommandNode) circleNode).arguments = expArgs;
+    }
+
+    currentToken = tokenStream.getNext();
+    if (!parseSemicolon()) {
+      System.out.println("Error! parseCircleCommand: parseSemicolon");
+
+      //pushBack previous token
+      tokenStream.pushBack(1);
+      //set current token to the previous token
+      currentToken = tokenStream.getNext();
+
+      return null;
+    }
+
+    return circleNode;
+  }
+
+  public ASTreeNode parseRectCommand() {
+
+    if (!parseRectSymbol()) {
+      return null;
+    }
+
+    int argumentCount = 5;
+    ASTreeNode rectNode = new RectCommandNode(null);
+    ASTreeNode expArgs[] = new ASTreeNode[argumentCount];
+
+    for (int i = 1; i <= argumentCount; i++) {
+
+      currentToken = tokenStream.getNext();
+
+      expArgs[i - 1] = parseExpression();
+      if (expArgs[i - 1] == null) {
+
+        System.out.println("Error! parseRectCommand: parseExpression");
+
+        //pushBack previous token
+        tokenStream.pushBack(i);
+        //set current token to the previous token
+        currentToken = tokenStream.getNext();
+
+        return null;
+      }
+
+      ((RectCommandNode) rectNode).arguments = expArgs;
+    }
+
+    currentToken = tokenStream.getNext();
+    if (!parseSemicolon()) {
+      System.out.println("Error! parseRectCommand: parseSemicolon");
+
+      //pushBack previous token
+      tokenStream.pushBack(1);
+      //set current token to the previous token
+      currentToken = tokenStream.getNext();
+
+      return null;
+    }
+
+    return rectNode;
   }
 
   public ASTreeNode parseInitialization() {

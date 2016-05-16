@@ -30,23 +30,15 @@ public class InterpreterDemo {
     for (UnitTest test : tests) {
       test.runTests();
     }
-
-    /*
-     System.out.println(litint.toString());
-     System.out.println(declint.toString());
-     System.out.println(assnode.toString());
-
-     System.out.println(interpret(assnode));
-     */
   }
 
   public static int interpret(ASTreeNode root) {
 
     if (root.nodeType.equals("Assignment")) {
-      int right = interpret(((AssignmentNode) root).right);
+      int right = interpret(((EqualNode) root).right);
       //set the symbol table with left.name and int type with right value
       //          t->leftchild->symbtable_entry->value=right_value;
-      System.out.println("Initialized " + ((DeclarationNode) ((AssignmentNode) root).left).identifier + " to " + right);
+      System.out.println("Initialized " + ((DeclarationNode) ((EqualNode) root).left).identifier + " to " + right);
 
       return right;
     } else if (root.nodeType.equals("LiteralInteger")) {

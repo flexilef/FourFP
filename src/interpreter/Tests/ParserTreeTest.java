@@ -27,7 +27,6 @@ public class ParserTreeTest extends UnitTest {
   @Override
   public void runTests() {
 
-    /*
     //initializations
     checkParse_ReturnBoolean("int var = 5 ;", true, "parse() : boolean : initialization with literal integer");
     checkParse_ReturnBoolean("int var = abc ;", true, "parse() : boolean : initialization with identifier");
@@ -50,20 +49,20 @@ public class ParserTreeTest extends UnitTest {
     checkParse_ReturnBoolean("var = abc + def ;", true, "parse() : boolean : assignment with mixed multiple identifiers in expression");
     checkParse_ReturnBoolean("var = ( 1 * 2 ) + 3 ;", true, "parse() : boolean : assignment with parenthesized expressions (literals)");
     checkParse_ReturnBoolean("var = ( a + ( 2 - b ) ) ;", true, "parse() : boolean : assignment with parenthesized expressions (identifiers)");
-*/
+            
     //Circle commands
     checkParse_ReturnBoolean("circle 1 2 3 4 ;", true, "parse() : boolean : circle command with literal arguments");
-    /*checkParse_ReturnBoolean("circle a bc def g ;", true, "parse() : boolean : circle command with identifier arguments");
+    checkParse_ReturnBoolean("circle a bc def g ;", true, "parse() : boolean : circle command with identifier arguments");
     checkParse_ReturnBoolean("circle 1 ab 2 cd ;", true, "parse() : boolean : circle command with mixed arguments");
     checkParse_ReturnBoolean("circle 1 + 2 a * 4 b - 6 7 / c ;", true, "parse() : boolean : circle command with expressions");
     checkParse_ReturnBoolean("circle ( 1 + 2 ) ( 3 * 4 ) 5 - 6 7 / 8 ;", true, "parse() : boolean : circle command with parentheses");
-*/
-    /*
+
+    
     //Rect Commands
     checkParse_ReturnBoolean("rect 1 2 3 4 5 ;", true, "parse() : boolean : rect command with literal arguments");
     checkParse_ReturnBoolean("rect a bc def g h ;", true, "parse() : boolean : rect command with identifier arguments");
     checkParse_ReturnBoolean("rect 1 ab 2 cd 3 ;", true, "parse() : boolean : rect command with mixed arguments");
-    checkParse_ReturnBoolean("rect ( 1 ) ( ab ) ( ( 3 * c ) ) 4 5 ;", true, "parse() : boolean : rect command with parentheses");*/
+    checkParse_ReturnBoolean("rect ( 1 ) ( ab ) ( ( 3 * c ) ) 4 5 ;", true, "parse() : boolean : rect command with parentheses");
 
     System.out.println("ParserTest tests run: " + getTotalTestsRun());
     System.out.println("ParserTest tests failed: " + getTotalTestsFailed());
@@ -73,7 +72,7 @@ public class ParserTreeTest extends UnitTest {
   private void checkParse_ReturnBoolean(String input, boolean expectedOutput, String error) {
     totalTestsRun++;
 
-    boolean actualOutput = testObject.parse(input);
+    boolean actualOutput = testObject.testParse(input);
 
     if (actualOutput != expectedOutput) {
       totalTestsFailed++;
