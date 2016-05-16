@@ -17,8 +17,7 @@ public class DivideNode extends BinaryOperatorNode {
       this.right = right;
       nodeType = "DivideNode";
     }
-    else
-    {
+    else {
       
     }
   }
