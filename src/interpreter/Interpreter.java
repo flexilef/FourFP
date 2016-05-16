@@ -12,15 +12,15 @@ package interpreter;
 public class Interpreter {
 
   private ParserTree parser;
-  private ASTreeNode root;
+  private SymbolTable symbolTable;
 
   public Interpreter() {
     parser = new ParserTree();
-    root = null;
+    symbolTable = SymbolTable.getInstance();
   }
 
   public void interpret(String input) {
-    root = parser.parse(input);
+    ASTreeNode root = parser.parse(input);
 
     interpret(root);
   }
@@ -57,6 +57,27 @@ public class Interpreter {
       int style = arg5Node.value;
 
       drawRectangle(x1, y1, x2, y2, style);
+    } else if (node.nodeType.equals("EqualNode")) {
+
+      EqualNode equalNode = (EqualNode) node;
+      LiteralIntegerNode rightNode = null;
+      String identifier = "";
+      int value;
+
+      if (equalNode.left.nodeType.equals("DeclarationNode")) {
+        identifier = ((DeclarationNode) (equalNode.left)).identifier;
+
+      } else if (equalNode.left.nodeType.equals("IdentifierNode")) {
+        identifier = ((IdentifierNode) (equalNode.left)).name;
+      }
+
+      rightNode = (LiteralIntegerNode) interpret(equalNode.right);
+      value = rightNode.value;
+
+      //add entry to the symboltable
+      symbolTable.put(identifier, value);
+
+      System.out.println("initialized '" + identifier + "' to '" + value + "'");
     } else if (node.nodeType.equals("PlusNode")) {
 
       PlusNode plusNode = (PlusNode) node;
