@@ -31,7 +31,9 @@ public class InterpreterDemo {
       test.runTests();
     }
 
-    String statement = "rect ( 1 ) ( 2 + 2 ) ( 3 - ( 3 * 2 ) ) ( 4 * 2 ) 2 ;";
+    //String statement = "rect ( 1 ) ( 2 + 2 ) ( 3 - ( 3 * 2 ) ) ( 4 * 2 ) 2 ;";
+    //String statement = "circle 1 2 3 4 ;";
+    String statement = "var = 5 ;";
 
     Interpreter interpreter = new Interpreter();
     interpreter.interpret(statement);

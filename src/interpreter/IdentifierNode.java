@@ -15,7 +15,7 @@ public class IdentifierNode extends ASTreeNode{
 
   IdentifierNode(String name) {
     this.name = name;
-    nodeType = "Identifier";
+    nodeType = "IdentifierNode";
   }
 
   @Override
