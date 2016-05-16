@@ -1,5 +1,4 @@
 import java.util.HashMap;
-import java.util.Iterator;
 
 public class SymbolTable {
     private HashMap symbol_table = new HashMap();
