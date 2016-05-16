@@ -9,16 +9,13 @@ package interpreter;
  *
  * @author Flex
  */
-public class ASTreeNode {
-  
-  public String nodeType; 
-          
-  ASTreeNode() {
-    nodeType = "Empty";
+class CharStreamRuntimeException extends RuntimeException {
+
+  public CharStreamRuntimeException() {
+    super();
   }
   
-  @Override 
-  public String toString() {
-    return "["+ nodeType +"]";
+  public CharStreamRuntimeException(String message) {
+    super(message);
   }
 }

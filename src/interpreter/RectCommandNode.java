@@ -12,7 +12,7 @@ package interpreter;
 public class RectCommandNode extends ASTreeNode {
 
   public ASTreeNode arguments[];
-  int argCount = 5;
+  public int argCount = 5;
 
   RectCommandNode(ASTreeNode args[]) {
     nodeType = "RectCommandNode";

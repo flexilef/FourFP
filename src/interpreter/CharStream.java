@@ -7,7 +7,6 @@ package interpreter;
 
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 /**
  *
@@ -48,7 +47,7 @@ public class CharStream {
       position++;
     }
     else {
-      throw new EmptyCharStreamRuntimeException("CharStream went past last element in stream");
+      throw new CharStreamRuntimeException("CharStream went past last element in stream");
     }
     
     return next;

@@ -12,7 +12,7 @@ package interpreter;
 public class CircleCommandNode extends ASTreeNode {
 
   public ASTreeNode arguments[];
-  int argCount = 4;
+  public int argCount = 4;
 
   CircleCommandNode(ASTreeNode args[]) {
     nodeType = "CircleCommandNode";
