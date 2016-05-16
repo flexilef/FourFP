@@ -12,9 +12,14 @@ package interpreter;
 public class DivideNode extends BinaryOperatorNode {
 
   DivideNode(ASTreeNode left, ASTreeNode right) {
-    this.left = left;
-    this.right = right;
-
-    nodeType = "DivideNode";
+    if (right != 0) {
+      this.left = left;
+      this.right = right;
+      nodeType = "DivideNode";
+    }
+    else
+    {
+      
+    }
   }
 }
