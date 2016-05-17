@@ -137,7 +137,7 @@ public class Interpreter {
       //add entry to the symboltable
       symbolTable.put(identifier, value);
 
-      System.out.println("initialized '" + identifier + "' to '" + value + "'");
+      //System.out.println("initialized '" + identifier + "' to '" + value + "'");
     } else if (node.nodeType.equals("PlusNode")) {
 
       PlusNode plusNode = (PlusNode) node;
