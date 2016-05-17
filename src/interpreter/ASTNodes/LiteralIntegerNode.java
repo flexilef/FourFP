@@ -15,7 +15,7 @@ public class LiteralIntegerNode extends ASTreeNode {
 
   public LiteralIntegerNode(int value) {
     this.value = value;
-    nodeType = "LiteralInteger";
+    nodeType = "LiteralIntegerNode";
   }
 
   @Override
