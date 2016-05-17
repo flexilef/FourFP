@@ -5,7 +5,7 @@
  */
 package interpreter.Tests;
 
-import interpreter.ASTreeNode;
+import interpreter.ASTNodes.ASTreeNode;
 import interpreter.ParserTree;
 
 
