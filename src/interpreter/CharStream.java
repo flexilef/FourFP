@@ -5,6 +5,7 @@
  */
 package interpreter;
 
+import interpreter.Error.CharStreamRuntimeException;
 import java.util.List;
 import java.util.ArrayList;
 

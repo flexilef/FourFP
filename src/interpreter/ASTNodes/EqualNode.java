@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package interpreter;
+package interpreter.ASTNodes;
 
 /**
  *
@@ -11,7 +11,7 @@ package interpreter;
  */
 public class EqualNode extends BinaryOperatorNode {
 
-  EqualNode(ASTreeNode left, ASTreeNode right) {
+  public EqualNode(ASTreeNode left, ASTreeNode right) {
     this.left = left;
     this.right = right;
 

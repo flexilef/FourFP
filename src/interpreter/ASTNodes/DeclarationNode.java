@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package interpreter;
+package interpreter.ASTNodes;
 
 /**
  *
@@ -14,7 +14,7 @@ public class DeclarationNode extends ASTreeNode {
   public String identifier;
   public String type;
   
-  DeclarationNode(String type, String identifier) {
+  public DeclarationNode(String type, String identifier) {
     nodeType = "DeclarationNode";
     this.type = type;
     this.identifier = identifier;

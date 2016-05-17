@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package interpreter;
+package interpreter.Error;
 
 /**
  *
  * @author Flex
  */
-class TokenStreamRuntimeException extends RuntimeException {
+public class TokenStreamRuntimeException extends RuntimeException {
   
   public TokenStreamRuntimeException() {
     super();

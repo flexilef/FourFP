@@ -3,23 +3,23 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package interpreter;
+package interpreter.ASTNodes;
 
 /**
  *
  * @author Flex
  */
-public class LiteralIntegerNode extends ASTreeNode {
+public class IdentifierNode extends ASTreeNode{
 
-  public int value;
+  public String name;
 
-  LiteralIntegerNode(int value) {
-    this.value = value;
-    nodeType = "LiteralInteger";
+  public IdentifierNode(String name) {
+    this.name = name;
+    nodeType = "IdentifierNode";
   }
 
   @Override
   public String toString() {
-    return "[" + nodeType + ":" + value + "]";
+    return "[" + nodeType + ":" + name + "]";
   }
 }

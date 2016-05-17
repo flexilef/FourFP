@@ -3,19 +3,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package interpreter;
+package interpreter.ASTNodes;
 
 /**
  *
  * @author Flex
  */
-public class CircleCommandNode extends ASTreeNode {
+public class RectCommandNode extends ASTreeNode {
 
   public ASTreeNode arguments[];
-  public int argCount = 4;
+  public int argCount = 5;
 
-  CircleCommandNode(ASTreeNode args[]) {
-    nodeType = "CircleCommandNode";
+  public RectCommandNode(ASTreeNode args[]) {
+    nodeType = "RectCommandNode";
 
     arguments = new ASTreeNode[argCount];
 
@@ -31,6 +31,7 @@ public class CircleCommandNode extends ASTreeNode {
     return "[" + nodeType + ":ARGUMENTS:" + arguments[0].toString() + ","
             + arguments[1].toString() + ","
             + arguments[2].toString() + ","
-            + arguments[3].toString() + "]";
+            + arguments[3].toString() + ","
+            + arguments[4].toString() + "]";
   }
 }

@@ -3,18 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package interpreter;
+package interpreter.ASTNodes;
 
 /**
  *
  * @author Flex
  */
-public class MultiplyNode extends BinaryOperatorNode {
+public class PlusNode extends BinaryOperatorNode {
 
-  MultiplyNode(ASTreeNode left, ASTreeNode right) {
+  public PlusNode(ASTreeNode left, ASTreeNode right) {
     this.left = left;
     this.right = right;
 
-    nodeType = "MultiplyNode";
+    nodeType = "PlusNode";
   }
 }
