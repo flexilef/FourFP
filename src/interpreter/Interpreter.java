@@ -41,34 +41,82 @@ public class Interpreter {
 
     if (node.nodeType.equals("CircleCommandNode")) {
 
+      int x = 0, y = 0, r = 0, s = 0;
+
       CircleCommandNode circleNode = (CircleCommandNode) node;
       ASTreeNode arg1Node = interpret(circleNode.arguments[0]);
       ASTreeNode arg2Node = interpret(circleNode.arguments[1]);
       ASTreeNode arg3Node = interpret(circleNode.arguments[2]);
       ASTreeNode arg4Node = interpret(circleNode.arguments[3]);
 
-      int x = ((LiteralIntegerNode) arg1Node).value;
-      int y = ((LiteralIntegerNode) arg2Node).value;
-      int r = ((LiteralIntegerNode) arg3Node).value;
-      int style = ((LiteralIntegerNode) arg4Node).value;
+      if (arg1Node.nodeType.equals("IdentifierNode")) {
+        System.out.println(arg1Node.nodeType);
+        x = symbolTable.get(((IdentifierNode) arg1Node).name);
+      } else if (arg1Node.nodeType.equals("LiteralIntegerNode")) {
+        x = ((LiteralIntegerNode) arg1Node).value;
+      }
 
-      drawCircle(x, y, r, style);
+      if (arg2Node.nodeType.equals("IdentifierNode")) {
+        y = symbolTable.get(((IdentifierNode) arg2Node).name);
+      } else if (arg2Node.nodeType.equals("LiteralIntegerNode")) {
+        y = ((LiteralIntegerNode) arg2Node).value;
+      }
+
+      if (arg3Node.nodeType.equals("IdentifierNode")) {
+        r = symbolTable.get(((IdentifierNode) arg3Node).name);
+      } else if (arg3Node.nodeType.equals("LiteralIntegerNode")) {
+        r = ((LiteralIntegerNode) arg3Node).value;
+      }
+
+      if (arg4Node.nodeType.equals("IdentifierNode")) {
+        s = symbolTable.get(((IdentifierNode) arg4Node).name);
+      } else if (arg4Node.nodeType.equals("LiteralIntegerNode")) {
+        s = ((LiteralIntegerNode) arg4Node).value;
+      }
+
+      drawCircle(x, y, r, s);
     } else if (node.nodeType.equals("RectCommandNode")) {
 
+      int x1 = 0, y1 = 0, x2 = 0, y2 = 0, s = 0;
+
       RectCommandNode rectNode = (RectCommandNode) node;
-      LiteralIntegerNode arg1Node = (LiteralIntegerNode) interpret(rectNode.arguments[0]);
-      LiteralIntegerNode arg2Node = (LiteralIntegerNode) interpret(rectNode.arguments[1]);
-      LiteralIntegerNode arg3Node = (LiteralIntegerNode) interpret(rectNode.arguments[2]);
-      LiteralIntegerNode arg4Node = (LiteralIntegerNode) interpret(rectNode.arguments[3]);
-      LiteralIntegerNode arg5Node = (LiteralIntegerNode) interpret(rectNode.arguments[4]);
+      ASTreeNode arg1Node = interpret(rectNode.arguments[0]);
+      ASTreeNode arg2Node = interpret(rectNode.arguments[1]);
+      ASTreeNode arg3Node = interpret(rectNode.arguments[2]);
+      ASTreeNode arg4Node = interpret(rectNode.arguments[3]);
+      ASTreeNode arg5Node = interpret(rectNode.arguments[4]);
 
-      int x1 = arg1Node.value;
-      int y1 = arg2Node.value;
-      int x2 = arg3Node.value;
-      int y2 = arg4Node.value;
-      int style = arg5Node.value;
+      if (arg1Node.nodeType.equals("IdentifierNode")) {
+        x1 = symbolTable.get(((IdentifierNode) arg1Node).name);
+      } else if (arg1Node.nodeType.equals("LiteralIntegerNode")) {
+        x1 = ((LiteralIntegerNode) arg1Node).value;
+      }
 
-      drawRectangle(x1, y1, x2, y2, style);
+      if (arg2Node.nodeType.equals("IdentifierNode")) {
+        y1 = symbolTable.get(((IdentifierNode) arg2Node).name);
+      } else if (arg2Node.nodeType.equals("LiteralIntegerNode")) {
+        y1 = ((LiteralIntegerNode) arg2Node).value;
+      }
+
+      if (arg3Node.nodeType.equals("IdentifierNode")) {
+        x2 = symbolTable.get(((IdentifierNode) arg3Node).name);
+      } else if (arg3Node.nodeType.equals("LiteralIntegerNode")) {
+        x2 = ((LiteralIntegerNode) arg3Node).value;
+      }
+
+      if (arg4Node.nodeType.equals("IdentifierNode")) {
+        y2 = symbolTable.get(((IdentifierNode) arg4Node).name);
+      } else if (arg4Node.nodeType.equals("LiteralIntegerNode")) {
+        y2 = ((LiteralIntegerNode) arg4Node).value;
+      }
+
+      if (arg5Node.nodeType.equals("IdentifierNode")) {
+        s = symbolTable.get(((IdentifierNode) arg5Node).name);
+      } else if (arg4Node.nodeType.equals("LiteralIntegerNode")) {
+        s = ((LiteralIntegerNode) arg4Node).value;
+      }
+
+      drawRectangle(x1, y1, x2, y2, s);
     } else if (node.nodeType.equals("EqualNode")) {
 
       EqualNode equalNode = (EqualNode) node;
@@ -89,46 +137,114 @@ public class Interpreter {
       //add entry to the symboltable
       symbolTable.put(identifier, value);
 
-      System.out.println("initialized '" + identifier + "' to '" + value + "'");
+      //System.out.println("initialized '" + identifier + "' to '" + value + "'");
     } else if (node.nodeType.equals("PlusNode")) {
 
       PlusNode plusNode = (PlusNode) node;
-      LiteralIntegerNode leftNode = (LiteralIntegerNode) interpret(plusNode.left);
-      LiteralIntegerNode rightNode = (LiteralIntegerNode) interpret(plusNode.right);
 
-      int result = leftNode.value + rightNode.value;
+      ASTreeNode leftNode = interpret(plusNode.left);
+      ASTreeNode rightNode = interpret(plusNode.right);
+
+      int left = 0, right = 0;
+
+      if (leftNode.nodeType.equals("IdentifierNode")) {
+        left = symbolTable.get(((IdentifierNode) leftNode).name);
+      } else if (leftNode.nodeType.equals("LiteralIntegerNode")) {
+        left = ((LiteralIntegerNode) leftNode).value;
+      }
+
+      if (rightNode.nodeType.equals("IdentifierNode")) {
+        right = symbolTable.get(((IdentifierNode) rightNode).name);
+      } else if (leftNode.nodeType.equals("LiteralIntegerNode")) {
+        right = ((LiteralIntegerNode) rightNode).value;
+      }
+
+      int result = left + right;
 
       return new LiteralIntegerNode(result);
     } else if (node.nodeType.equals("MinusNode")) {
 
       MinusNode minusNode = (MinusNode) node;
-      LiteralIntegerNode leftNode = (LiteralIntegerNode) interpret(minusNode.left);
-      LiteralIntegerNode rightNode = (LiteralIntegerNode) interpret(minusNode.right);
 
-      int result = leftNode.value - rightNode.value;
+      ASTreeNode leftNode = interpret(minusNode.left);
+      ASTreeNode rightNode = interpret(minusNode.right);
+
+      int left = 0, right = 0;
+
+      if (leftNode.nodeType.equals("IdentifierNode")) {
+        left = symbolTable.get(((IdentifierNode) leftNode).name);
+      } else if (leftNode.nodeType.equals("LiteralIntegerNode")) {
+        left = ((LiteralIntegerNode) leftNode).value;
+      }
+
+      if (rightNode.nodeType.equals("IdentifierNode")) {
+        right = symbolTable.get(((IdentifierNode) rightNode).name);
+      } else if (leftNode.nodeType.equals("LiteralIntegerNode")) {
+        right = ((LiteralIntegerNode) rightNode).value;
+      }
+
+      int result = left - right;
 
       return new LiteralIntegerNode(result);
     } else if (node.nodeType.equals("MultiplyNode")) {
 
       MultiplyNode multiplyNode = (MultiplyNode) node;
-      LiteralIntegerNode leftNode = (LiteralIntegerNode) interpret(multiplyNode.left);
-      LiteralIntegerNode rightNode = (LiteralIntegerNode) interpret(multiplyNode.right);
 
-      int result = leftNode.value * rightNode.value;
+      ASTreeNode leftNode = interpret(multiplyNode.left);
+      ASTreeNode rightNode = interpret(multiplyNode.right);
+
+      int left = 0, right = 0;
+
+      if (leftNode.nodeType.equals("IdentifierNode")) {
+        left = symbolTable.get(((IdentifierNode) leftNode).name);
+      } else if (leftNode.nodeType.equals("LiteralIntegerNode")) {
+        left = ((LiteralIntegerNode) leftNode).value;
+      }
+
+      if (rightNode.nodeType.equals("IdentifierNode")) {
+        right = symbolTable.get(((IdentifierNode) rightNode).name);
+      } else if (leftNode.nodeType.equals("LiteralIntegerNode")) {
+        right = ((LiteralIntegerNode) rightNode).value;
+      }
+
+      int result = left * right;
 
       return new LiteralIntegerNode(result);
     } else if (node.nodeType.equals("DivideNode")) {
 
       DivideNode divideNode = (DivideNode) node;
-      LiteralIntegerNode leftNode = (LiteralIntegerNode) interpret(divideNode.left);
-      LiteralIntegerNode rightNode = (LiteralIntegerNode) interpret(divideNode.right);
 
-      int result = leftNode.value * rightNode.value;
+      ASTreeNode leftNode = interpret(divideNode.left);
+      ASTreeNode rightNode = interpret(divideNode.right);
+
+      int left = 0, right = 1;
+
+      if (leftNode.nodeType.equals("IdentifierNode")) {
+        left = symbolTable.get(((IdentifierNode) leftNode).name);
+      } else if (leftNode.nodeType.equals("LiteralIntegerNode")) {
+        left = ((LiteralIntegerNode) leftNode).value;
+      }
+
+      if (rightNode.nodeType.equals("IdentifierNode")) {
+        right = symbolTable.get(((IdentifierNode) rightNode).name);
+      } else if (leftNode.nodeType.equals("LiteralIntegerNode")) {
+        right = ((LiteralIntegerNode) rightNode).value;
+      }
+
+      int result = 0;
+      if (right != 0) {
+        result = left / right;
+      }
 
       return new LiteralIntegerNode(result);
-    } else if (node.nodeType.equals("LiteralInteger")) {
+    } else if (node.nodeType.equals("LiteralIntegerNode")) {
 
       return node;
+    } else if (node.nodeType.equals("IdentifierNode")) {
+
+      int value = symbolTable.get(((IdentifierNode) node).name);
+
+      return new LiteralIntegerNode(value);
     }
 
     return null;

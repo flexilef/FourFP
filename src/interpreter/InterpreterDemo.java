@@ -33,9 +33,15 @@ public class InterpreterDemo {
 
     //String statement = "rect ( 1 ) ( 2 + 2 ) ( 3 - ( 3 * 2 ) ) ( 4 * 2 ) 2 ;";
     //String statement = "circle 1 2 3 4 ;";
-    String statement = "var = 5 ;";
+    String s1 = "int var = 5 ;";
+    String s2 = "circle 4 var 6 7 ;";
+    String s3 = "var = 666 ;";
+    String s4 = "rect var var 6 6 6 ;";
 
     Interpreter interpreter = new Interpreter();
-    interpreter.interpret(statement);
+    interpreter.interpret(s1);
+    interpreter.interpret(s2);
+    interpreter.interpret(s3);
+    interpreter.interpret(s4);
   }
 }
