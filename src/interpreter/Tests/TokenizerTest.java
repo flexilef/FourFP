@@ -25,13 +25,19 @@ public class TokenizerTest extends UnitTest {
   @Override
   public void runTests() {
 
+    checkTokenize_ReturnTokenStream("", "{}", "tokenize(): TokenStream: empty string");
+    checkTokenize_ReturnTokenStream(" ", "{}", "tokenize(): TokenStream: empty space");
+    checkTokenize_ReturnTokenStream("#this is a comment", "{}", "tokenize(): TokenStream: single line comment");
+    checkTokenize_ReturnTokenStream("#", "{}", "tokenize(): TokenStream: comment symbol");
+    checkTokenize_ReturnTokenStream("#comment \n int var = 5 ;",
+            "{{BasicType:int}{Identifier:var}{BinaryOperator:=}{LiteralInteger:5}{Separator:;}}",
+            "tokenize(): TokenStream: comment symbol");
     checkTokenize_ReturnTokenStream("int", "{{BasicType:int}}", "tokenize(): TokenStream: basic type");
     checkTokenize_ReturnTokenStream("int ", "{{BasicType:int}}", "tokenize(): TokenStream: ends with space");
     checkTokenize_ReturnTokenStream("circle", "{{Command:circle}}", "tokenize(): TokenStream: circle command");
     checkTokenize_ReturnTokenStream("rect", "{{Command:rect}}", "tokenize(): TokenStream: rect command");
     checkTokenize_ReturnTokenStream("(", "{{Separator:(}}", "tokenize(): TokenStream: '(' separator");
     checkTokenize_ReturnTokenStream(")", "{{Separator:)}}", "tokenize(): TokenStream: ')' separator");
-    checkTokenize_ReturnTokenStream("#", "{{Comment:#}}", "tokenize(): TokenStream: '#' separator");
     checkTokenize_ReturnTokenStream("+", "{{BinaryOperator:+}}", "tokenize(): TokenStream: + binary operator");
     checkTokenize_ReturnTokenStream("-", "{{BinaryOperator:-}}", "tokenize(): TokenStream: - binary operator");
     checkTokenize_ReturnTokenStream("/", "{{BinaryOperator:/}}", "tokenize(): TokenStream: / binary operator");

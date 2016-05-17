@@ -38,20 +38,4 @@ public class InterpreterDemo {
     Interpreter interpreter = new Interpreter();
     interpreter.interpret(statement);
   }
-
-  public static int interpret(ASTreeNode root) {
-
-    if (root.nodeType.equals("Assignment")) {
-      int right = interpret(((EqualNode) root).right);
-      //set the symbol table with left.name and int type with right value
-      //          t->leftchild->symbtable_entry->value=right_value;
-      System.out.println("Initialized " + ((DeclarationNode) ((EqualNode) root).left).identifier + " to " + right);
-
-      return right;
-    } else if (root.nodeType.equals("LiteralInteger")) {
-      return ((LiteralIntegerNode) root).value;
-    }
-
-    return 0;
-  }
 }
