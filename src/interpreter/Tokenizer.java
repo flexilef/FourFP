@@ -50,7 +50,13 @@ public class Tokenizer {
     while (inputStream.hasNext()) {
       nextChar = inputStream.getNext();
 
-      if (nextChar != ' ') {
+      //ignore comments until a newline is found
+      if (nextChar == '#') {
+        while (inputStream.hasNext() && nextChar != '\n') {
+          nextChar = inputStream.getNext();
+        }
+      } //tokenize on whitespace found
+      else if (nextChar != ' ') {
         sb.append(nextChar);
       } else {
 
@@ -90,8 +96,6 @@ public class Tokenizer {
       token = new Token("Command", tokenStr);
     } else if (Pattern.matches("[\\(\\);]", tokenStr)) {
       token = new Token("Separator", tokenStr);
-    } else if (Pattern.matches("#", tokenStr)) {
-      token = new Token("Comment", tokenStr);
     } else if (Pattern.matches("[a-z]+", tokenStr)) {
       token = new Token("Identifier", tokenStr);
     } else if (Pattern.matches("\\d+", tokenStr)) {

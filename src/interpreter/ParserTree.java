@@ -34,7 +34,7 @@ public class ParserTree {
     tokenStream = tk.getTokenStream();
 
     ASTreeNode root = parse();
-    System.out.println(root);
+    //System.out.println(root);
 
     return root != null;
   }
